@@ -187,6 +187,24 @@ public class SplineCurve {
             Arrays.toString(m_knots), m_degree, m_range.toString());
   }
 
+  /**
+   * スプライン曲線の複製を取得します.
+   *
+   * @return 複製したスプライン曲線
+   */
+  public SplineCurve copy() {
+    return SplineCurve.create(m_degree, m_cp.clone(), m_knots.clone(), m_range.copy());
+  }
+
+
+  /**
+   * コンストラクタ
+   *
+   * @param _degree        次数
+   * @param _controlPoints 制御点列
+   * @param _knots         節点列
+   * @param _range         定義域
+   */
   public SplineCurve(int _degree, Point[] _controlPoints, double[] _knots, Range _range) {
     m_degree = _degree;
     m_cp = _controlPoints;

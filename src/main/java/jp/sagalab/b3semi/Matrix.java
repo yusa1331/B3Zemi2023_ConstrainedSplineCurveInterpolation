@@ -532,6 +532,13 @@ public class Matrix {
     return builder.toString();
   }
 
+
+  /**
+   * コンストラクタ
+   *
+   * @param _elements   行列要素群
+   * @param _columnSize 列数
+   */
   public Matrix(double[] _elements, int _columnSize) {
     m_elements = _elements;
     m_columnSize = _columnSize;

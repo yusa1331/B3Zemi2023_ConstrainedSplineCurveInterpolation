@@ -1,8 +1,5 @@
 package jp.sagalab.b3semi;
 
-
-import jp.sagalab.b3semi.io.csv.WriteToCSV;
-
 import java.util.Arrays;
 
 /**
@@ -75,6 +72,22 @@ public final class SplineCurveInterpolator {
     return SplineCurve.create(_degree, controlPoints, knots, range);
   }
 
+  /**
+   * 指定された点列に対してスプライン曲線補間を行います。
+   *
+   * @param _points       点列
+   * @param _degree       次数
+   * @param _knots        節点
+   * @return スプライン曲線
+   * @throws IllegalArgumentException 次数が0以下の場合
+   * @throws IllegalArgumentException 節点列がnullの場合
+   * @throws IllegalArgumentException 節点列の要素数が2*degree-1以下の場合
+   * @throws IllegalArgumentException 点列がnullの場合
+   * @throws IllegalArgumentException 点列にnullが含まれる場合
+   * @throws IllegalArgumentException 点列の要素数が1以下の場合
+   * @throws IllegalArgumentException 点列中の時刻がNaN、もしくは無限大の場合
+   * @throws IllegalArgumentException 点列中に時間的に逆行している箇所があった場合
+   */
   public static SplineCurve interpolate(Point[] _points, int _degree, double[] _knots) {
     // 次数のチェック
     if (_degree < 1) {
@@ -88,6 +101,7 @@ public final class SplineCurveInterpolator {
     if (_knots.length <= 2 * _degree - 1) {
       throw new IllegalArgumentException(" knots's length must be greater than 2 * _degree - 1 ");
     }
+    //入力点列のチェック
     if (_points == null) {
       throw new IllegalArgumentException("_points is null.");
     }

@@ -117,7 +117,15 @@ public class Point {
     return String.format("x:%.3f y:%.3f t:%.3f", m_x, m_y, m_t);
   }
 
-  private Point(double _x, double _y, double _t) {
+
+  /**
+   * コンストラクタ
+   *
+   * @param _x x座標
+   * @param _y y座標
+   * @param _t 時刻パラメータ
+   */
+  public Point(double _x, double _y, double _t) {
     m_x = _x;
     m_y = _y;
     m_t = _t;

@@ -129,6 +129,22 @@ public class Range {
     return String.format("s:%.3f e:%.3f", m_start, m_end);
   }
 
+  /**
+   * 範囲の複製を取得します.
+   *
+   * @return 複製した範囲
+   */
+  public Range copy() {
+    return Range.create(m_start, m_end);
+  }
+
+
+  /**
+   * コンストラクタ
+   *
+   * @param _start 開始値
+   * @param _end   終了値
+   */
   public Range(double _start, double _end) {
     m_start = _start;
     m_end = _end;
@@ -138,7 +154,6 @@ public class Range {
   private final double m_start;
   /** 終了値 */
   private final double m_end;
-
   /** [ 0 - 1 ] */
   private static Range c_zeroOne;
 }
