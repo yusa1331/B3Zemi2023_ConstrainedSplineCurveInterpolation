@@ -51,6 +51,8 @@ public class Main extends JFrame {
       List<Point> points = ReadCSV.readPoints(pointsFile);
       // m_Pointsを上書き
       setPoints(points);
+      //Canvasを初期化
+      clear();
       // 点列を描画
       for (Point point : points) {
         drawPoint(point.x(), point.y(), 1.5, Color.BLACK);
