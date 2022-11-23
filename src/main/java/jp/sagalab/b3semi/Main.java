@@ -1,5 +1,6 @@
 package jp.sagalab.b3semi;
 
+import jp.sagalab.b3semi.graph.PointsGraph;
 import jp.sagalab.b3semi.io.csv.ReadCSV;
 import jp.sagalab.b3semi.io.csv.WriteToCSV;
 
@@ -99,46 +100,54 @@ public class Main extends JFrame {
     );
   }
 
+  public static void createPointsGraph(Point[] _points, double[] _knots) {
+    PointsGraph pointsGraph = PointsGraph.create(_points, _knots);
+    POINTS_GRAPH_FRAME.getContentPane().removeAll();
+    POINTS_GRAPH_FRAME.getContentPane().add(pointsGraph);
+    POINTS_GRAPH_FRAME.pack();
+    POINTS_GRAPH_FRAME.setVisible(true);
+  }
+
   /**
    * スプライン曲線を求め、描画を行う.
    */
   public void drawSplineCurve() {
 
-//    // ---------- ↓knotを指定しない場合↓ (節点間隔に合わせて節点列を自動で生成) ----------
-//    // 分かりやすいように時刻パラメータを0から始まるようにシフトしておく.
-//    List<Point> shiftedPoints = shiftPointsTimeZero();
-//    // リストを配列に変換する.
-//    Point[] points = shiftedPoints.toArray(new Point[0]);
-//
-//    // 次数
-//    int degree = 3;
-//
-//    // 節点間隔
-//    double knotInterval = 0.1;
-//
-//    // スプライン補間を行う
-//    // SplineCurveInterpolator.interpolateの引数は(点列(Point[]型), 次数(int型), 節点間隔(double型))にする.
-//    SplineCurve splineCurve = SplineCurveInterpolator.interpolate(points, degree, knotInterval);
-//    // ---------- ↑knotを指定しない場合↑ (節点間隔に合わせて節点列を自動で生成) ----------
-
-
-    // ++++++++++ ↓knotを指定する場合↓ ++++++++++
-    // 時刻パラメータを正規化しておくと節点を自分で定義しやすい.
-    Range timeRange = Range.create(0.0, 1.0);
-    // 点列の時系列を正規化する.
-    List<Point> normalizePoints = normalizePoints(timeRange);
+    // ---------- ↓knotを指定しない場合↓ (節点間隔に合わせて節点列を自動で生成) ----------
+    // 分かりやすいように時刻パラメータを0から始まるようにシフトしておく.
+    List<Point> shiftedPoints = shiftPointsTimeZero();
     // リストを配列に変換する.
-    Point[] points = normalizePoints.toArray(new Point[0]);
+    Point[] points = shiftedPoints.toArray(new Point[0]);
 
     // 次数
     int degree = 3;
 
-    // 節点を定義する.
-    double[] knot = new double[]{-0.4, -0.2, 0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4};
+    // 節点間隔
+    double knotInterval = 0.1;
+
     // スプライン補間を行う
-    //SplineCurveInterpolator.interpolateの引数は(点列(Point[]型), 次数(int型), 節点列(double[]型))
-    SplineCurve splineCurve = SplineCurveInterpolator.interpolate(points, degree, knot);
-    // ++++++++++ ↑knotを指定する場合↑ ++++++++++
+    // SplineCurveInterpolator.interpolateの引数は(点列(Point[]型), 次数(int型), 節点間隔(double型))にする.
+    SplineCurve splineCurve = SplineCurveInterpolator.interpolate(points, degree, knotInterval);
+    // ---------- ↑knotを指定しない場合↑ (節点間隔に合わせて節点列を自動で生成) ----------
+
+
+//    // ++++++++++ ↓knotを指定する場合↓ ++++++++++
+//    // 時刻パラメータを正規化しておくと節点を自分で定義しやすい.
+//    Range timeRange = Range.create(0.0, 1.0);
+//    // 点列の時系列を正規化する.
+//    List<Point> normalizePoints = normalizePoints(timeRange);
+//    // リストを配列に変換する.
+//    Point[] points = normalizePoints.toArray(new Point[0]);
+//
+//    // 次数
+//    int degree = 3;
+//
+//    // 節点を定義する.
+//    double[] knot = new double[]{-0.4, -0.2, 0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4};
+//    // スプライン補間を行う
+//    //SplineCurveInterpolator.interpolateの引数は(点列(Point[]型), 次数(int型), 節点列(double[]型))
+//    SplineCurve splineCurve = SplineCurveInterpolator.interpolate(points, degree, knot);
+//    // ++++++++++ ↑knotを指定する場合↑ ++++++++++
 
 
     // スプライン曲線の評価点を求める↓
@@ -256,6 +265,9 @@ public class Main extends JFrame {
 
     m_points = new ArrayList<>(_points);
   }
+
+  /** PointsGraphを保持するためのJFrame */
+  private static final JFrame POINTS_GRAPH_FRAME = new JFrame();
 
   /** キャンバスを表す変数 */
   private final Canvas m_canvas = new Canvas();

@@ -1,5 +1,7 @@
 package jp.sagalab.b3semi;
 
+import jp.sagalab.b3semi.graph.PointsGraph;
+
 import java.util.Arrays;
 
 /**
@@ -61,6 +63,9 @@ public final class SplineCurveInterpolator {
 
     // 節点系列の生成
     double[] knots = createKnots(range, _degree, _knotInterval);
+
+    // PointsGraphの生成
+    Main.createPointsGraph(_points, knots);
 
     // 重み行列の生成
     Matrix wmat = createWeightMatrix(_points, _degree, knots);
@@ -127,6 +132,9 @@ public final class SplineCurveInterpolator {
     }
 
     Range range = Range.create(_points[0].time(), _points[_points.length - 1].time());
+
+    // PointsGraphの生成
+    Main.createPointsGraph(_points, _knots);
 
     // 重み行列の生成
     Matrix wmat = createWeightMatrix(_points, _degree, _knots);
