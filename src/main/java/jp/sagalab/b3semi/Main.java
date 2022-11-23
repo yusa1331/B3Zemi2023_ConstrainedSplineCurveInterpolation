@@ -135,9 +135,9 @@ public class Main extends JFrame {
 //    // 時刻パラメータを正規化しておくと節点を自分で定義しやすい.
 //    Range timeRange = Range.create(0.0, 1.0);
 //    // 点列の時系列を正規化する.
-//    List<Point> normalizePoints = normalizePoints(timeRange);
+//    List<Point> normalizedPoints = normalizePoints(timeRange);
 //    // リストを配列に変換する.
-//    Point[] points = normalizePoints.toArray(new Point[0]);
+//    Point[] points = normalizedPoints.toArray(new Point[0]);
 //
 //    // 次数
 //    int degree = 3;
