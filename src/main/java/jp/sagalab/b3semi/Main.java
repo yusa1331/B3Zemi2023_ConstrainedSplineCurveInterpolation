@@ -104,41 +104,41 @@ public class Main extends JFrame {
    */
   public void drawSplineCurve() {
 
-    // ---------- ↓knotを指定しない場合↓ (節点間隔に合わせて節点列を自動で生成) ----------
-    // 分かりやすいように時刻パラメータを0から始まるようにシフトしておく.
-    shiftPointsTimeZero();
-    // リストを配列に変換する.
-    Point[] points = m_points.toArray(new Point[0]);
-
-    // 次数
-    int degree = 3;
-
-    // 節点間隔
-    double knotInterval = 0.1;
-
-    // スプライン補間を行う
-    // SplineCurveInterpolator.interpolateの引数は(点列(Point[]型), 次数(int型), 節点間隔(double型))にする.
-    SplineCurve splineCurve = SplineCurveInterpolator.interpolate(points, degree, knotInterval);
-    // ---------- ↑knotを指定しない場合↑ (節点間隔に合わせて節点列を自動で生成) ----------
-
-
-//    // ++++++++++ ↓knotを指定する場合↓ ++++++++++
-//    // 時刻パラメータを正規化しておくと節点を自分で定義しやすい.
-//    Range timeRange = Range.create(0.0, 1.0);
-//    // 点列の時系列を正規化する.
-//    normalizePoints(timeRange);
+//    // ---------- ↓knotを指定しない場合↓ (節点間隔に合わせて節点列を自動で生成) ----------
+//    // 分かりやすいように時刻パラメータを0から始まるようにシフトしておく.
+//    List<Point> shiftedPoints = shiftPointsTimeZero();
 //    // リストを配列に変換する.
-//    Point[] points = m_points.toArray(new Point[0]);
+//    Point[] points = shiftedPoints.toArray(new Point[0]);
 //
 //    // 次数
 //    int degree = 3;
 //
-//    // 節点を定義する.
-//    double[] knot = new double[]{-0.4, -0.2, 0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4};
+//    // 節点間隔
+//    double knotInterval = 0.1;
+//
 //    // スプライン補間を行う
-//    //SplineCurveInterpolator.interpolateの引数は(点列(Point[]型), 次数(int型), 節点列(double[]型))
-//    SplineCurve splineCurve = SplineCurveInterpolator.interpolate(points, degree, knot);
-//    // ++++++++++ ↑knotを指定する場合↑ ++++++++++
+//    // SplineCurveInterpolator.interpolateの引数は(点列(Point[]型), 次数(int型), 節点間隔(double型))にする.
+//    SplineCurve splineCurve = SplineCurveInterpolator.interpolate(points, degree, knotInterval);
+//    // ---------- ↑knotを指定しない場合↑ (節点間隔に合わせて節点列を自動で生成) ----------
+
+
+    // ++++++++++ ↓knotを指定する場合↓ ++++++++++
+    // 時刻パラメータを正規化しておくと節点を自分で定義しやすい.
+    Range timeRange = Range.create(0.0, 1.0);
+    // 点列の時系列を正規化する.
+    List<Point> normalizePoints = normalizePoints(timeRange);
+    // リストを配列に変換する.
+    Point[] points = normalizePoints.toArray(new Point[0]);
+
+    // 次数
+    int degree = 3;
+
+    // 節点を定義する.
+    double[] knot = new double[]{-0.4, -0.2, 0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4};
+    // スプライン補間を行う
+    //SplineCurveInterpolator.interpolateの引数は(点列(Point[]型), 次数(int型), 節点列(double[]型))
+    SplineCurve splineCurve = SplineCurveInterpolator.interpolate(points, degree, knot);
+    // ++++++++++ ↑knotを指定する場合↑ ++++++++++
 
 
     // スプライン曲線の評価点を求める↓
@@ -200,8 +200,8 @@ public class Main extends JFrame {
   /**
    * 点列の時刻パラメータが0始まりになるように全体をシフトします.
    */
-  public void shiftPointsTimeZero() {
-    normalizePoints(Range.create(0, m_points.get(m_points.size() - 1).time() - m_points.get(0).time()));
+  public List<Point> shiftPointsTimeZero() {
+    return normalizePoints(Range.create(0, m_points.get(m_points.size() - 1).time() - m_points.get(0).time()));
   }
 
   /**
@@ -210,7 +210,7 @@ public class Main extends JFrame {
    *
    * @param _range 正規化後の時刻パラメータの範囲
    */
-  public void normalizePoints(Range _range) {
+  public List<Point> normalizePoints(Range _range) {
     double startTime = m_points.get(0).time();
     double timeLength = m_points.get(m_points.size() - 1).time() - startTime;
     double rangeLength = _range.length();
@@ -220,7 +220,7 @@ public class Main extends JFrame {
               , _range.start() + (point.time() - startTime) * (rangeLength / timeLength)));
     }
 
-    setPoints(points);
+    return points;
   }
 
   /**
