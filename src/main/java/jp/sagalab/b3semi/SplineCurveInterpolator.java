@@ -1,7 +1,5 @@
 package jp.sagalab.b3semi;
 
-import jp.sagalab.b3semi.graph.PointsGraph;
-
 import java.util.Arrays;
 
 /**
@@ -71,7 +69,7 @@ public final class SplineCurveInterpolator {
     Matrix wmat = createWeightMatrix(_points, _degree, knots);
 
     // 制御点列の導出
-    Point[] controlPoints = calculateControlPoints(wmat, _points);
+    Point[] controlPoints = calculateControlPoints(wmat, _points, knots, _degree);
 
     // スプライン曲線構築
     return SplineCurve.create(_degree, controlPoints, knots, range);
@@ -93,7 +91,7 @@ public final class SplineCurveInterpolator {
    * @throws IllegalArgumentException 点列中の時刻がNaN、もしくは無限大の場合
    * @throws IllegalArgumentException 点列中に時間的に逆行している箇所があった場合
    */
-  public static SplineCurve interpolate(Point[] _points, int _degree, double[] _knots) {
+  public static SplineCurve interpolate(Point[] _points, double[] _knots,int _degree) {
     // 次数のチェック
     if (_degree < 1) {
       throw new IllegalArgumentException(" degree is must be greater than 0 ");
@@ -140,7 +138,7 @@ public final class SplineCurveInterpolator {
     Matrix wmat = createWeightMatrix(_points, _degree, _knots);
 
     // 制御点列の導出
-    Point[] controlPoints = calculateControlPoints(wmat, _points);
+    Point[] controlPoints = calculateControlPoints(wmat, _points, _knots, _degree);
 
     // スプライン曲線構築
     return SplineCurve.create(_degree, controlPoints, _knots, range);
@@ -260,17 +258,26 @@ public final class SplineCurveInterpolator {
    * @param _points 通過点列
    * @return 制御点列
    */
-  private static Point[] calculateControlPoints(Matrix _mat, Point[] _points) {
+  private static Point[] calculateControlPoints(Matrix _mat, Point[] _points, double[] _knots, int _degree) {
     double[][] elements = new double[_points.length][];
     for (int i = 0; i < _points.length; ++i) {
       Point p = _points[i];
       elements[i] = new double[]{p.x(), p.y()};
     }
 
-    Matrix result = LeastSquares.solve(_mat, Matrix.create(elements));
+    // 制約行列(目的関数) Cd = q のCを生成する.
+    // C行列は行数:制約の数, 列数:制御点数(_knots.length - _degree + 1)となるようなMatrix型の変数.
+    Matrix C = ;
+
+    // 制約行列(目的関数) Cd = q のqを生成する.(dは求める制御点列)
+    // qは行数:制約の数, 列数:2(xの値, yの値)となるようなMatrix型の変数.
+    Matrix q = ;
+
+    // 解行列(d λ)T を求める.
+    Matrix result = LeastSquares.solveConstrained(_mat, Matrix.create(elements), C, q);
 
     // 制御点列の構成
-    Point[] controlPoints = new Point[result.rowSize()];
+    Point[] controlPoints = new Point[_knots.length - _degree + 1];
     for (int i = 0; i < controlPoints.length; ++i) {
       controlPoints[i] = Point.createXY(result.get(i, 0), result.get(i, 1));
     }

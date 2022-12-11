@@ -146,7 +146,7 @@ public class Main extends JFrame {
 //    double[] knot = new double[]{-0.4, -0.2, 0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4};
 //    // スプライン補間を行う
 //    //SplineCurveInterpolator.interpolateの引数は(点列(Point[]型), 次数(int型), 節点列(double[]型))
-//    SplineCurve splineCurve = SplineCurveInterpolator.interpolate(points, degree, knot);
+//    SplineCurve splineCurve = SplineCurveInterpolator.interpolate(points, knot, degree);
 //    // ++++++++++ ↑knotを指定する場合↑ ++++++++++
 
 
