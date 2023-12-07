@@ -1,2 +1,2 @@
-# B3Zemi2022_ConstrainedSplineCurveInterpolation
-B3ゼミ2022用の制約付きスプライン曲線補間を行うプログラムです.
+# B3Zemi2023_ConstrainedSplineCurveInterpolation
+B3ゼミ2023用の制約付きスプライン曲線補間を行うプログラムです.
